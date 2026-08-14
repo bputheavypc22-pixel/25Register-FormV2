@@ -1,7 +1,6 @@
 require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
-const axios = require('axios');
 
 const token = process.env.BOT_TOKEN;
 const sheetUrl = process.env.GOOGLE_SHEET_URL; 
@@ -142,10 +141,14 @@ bot.on('message', async (msg) => {
         }).catch(err => console.error('Telegram Group Topic Error:', err.message));
       }
 
-      // C. Post Row into Google Sheets
+      // C. Post Row into Google Sheets using native fetch
       if (sheetUrl) {
         try {
-          await axios.post(sheetUrl, finalData);
+          await fetch(sheetUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(finalData)
+          });
         } catch (err) {
           console.error('Google Sheet Sync Error:', err.message);
         }
