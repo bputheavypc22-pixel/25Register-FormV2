@@ -6,6 +6,7 @@ const axios = require('axios');
 const token = process.env.BOT_TOKEN;
 const sheetUrl = process.env.GOOGLE_SHEET_URL; 
 const groupId = process.env.TELEGRAM_GROUP_ID;  
+const topicClientId = process.env.TOPIC_CLIENT_ID;
 
 if (!token) {
   console.error('Error: BOT_TOKEN is missing!');
@@ -14,7 +15,7 @@ if (!token) {
 
 const bot = new (TelegramBot.default || TelegramBot)(token, { polling: true });
 
-// Store user sessions during form entry
+// Store active user sessions during form submission
 const userSessions = {};
 
 // Persistent Main Menu Keyboard
@@ -38,14 +39,14 @@ bot.onText(/\/start/, (msg) => {
   );
 });
 
-// Handle Messages & Step-by-Step Inquiry Flow
+// Handle Text Messages & Form Steps
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
 
   if (!text) return;
 
-  // 1. Menu Action: Contact Us
+  // 1. Contact Us Button
   if (text === '📞 Contact Us') {
     return bot.sendMessage(
       chatId, 
@@ -56,13 +57,13 @@ bot.on('message', async (msg) => {
     );
   }
 
-  // 2. Menu Action: Start Form
+  // 2. Start Form Button
   if (text === '📝 Submit Client Inquiry') {
     userSessions[chatId] = { step: 'NAME' };
     return bot.sendMessage(chatId, '👤 Please enter client **Full Name**:');
   }
 
-  // Form Wizard Questions
+  // Handle Step-by-Step Questions
   const session = userSessions[chatId];
   if (session) {
     
@@ -73,7 +74,7 @@ bot.on('message', async (msg) => {
       return bot.sendMessage(chatId, '📱 Enter **Phone Number (Tel 1)**:');
     }
 
-    // Step: Tel 1 -> Ask Target (Buy or Rent)
+    // Step: Tel 1 -> Ask Target Goal
     if (session.step === 'TEL1') {
       session.tel1 = text;
       session.step = 'TARGET';
@@ -93,22 +94,22 @@ bot.on('message', async (msg) => {
       return bot.sendMessage(chatId, '📍 Enter preferred **Location / Area** (or type - to skip):');
     }
 
-    // Step: Area -> Ask Remark / Extra Details
+    // Step: Area -> Ask Remarks
     if (session.step === 'AREA') {
       session.area = text === '-' ? '' : text;
       session.step = 'REMARK';
       return bot.sendMessage(chatId, '📝 Any additional **Remarks / Specific Requirements**? (or type - to skip):');
     }
 
-    // Step: Remark -> Complete Form & Submit
+    // Step: Remark -> Complete and Dispatch Data
     if (session.step === 'REMARK') {
       session.remark = text === '-' ? '' : text;
       session.telegram = msg.from.username ? `@${msg.from.username}` : msg.from.first_name;
 
       const finalData = { ...session };
-      delete userSessions[chatId]; // Clear session state
+      delete userSessions[chatId]; // Reset session
 
-      // 1. Send confirmation message to user
+      // A. Send confirmation to Client
       await bot.sendMessage(
         chatId,
         `✅ **Inquiry Recorded Successfully!**\n\n` +
@@ -122,41 +123,44 @@ bot.on('message', async (msg) => {
         { parse_mode: 'Markdown', ...mainMenuKeyboard }
       );
 
-      // 2. Broadcast alert to Telegram Group
-      if (groupId) {
-        const groupMsg = 
+      // B. Send Alert directly into TOPIC_CLIENT_ID in your Group
+      if (groupId && topicClientId) {
+        const clientTopicMsg = 
           `🚨 **NEW CLIENT INQUIRY!**\n\n` +
           `👤 **Name:** ${finalData.name}\n` +
           `📱 **Tel:** ${finalData.tel1}\n` +
           `✈️ **Telegram:** ${finalData.telegram}\n` +
           `🎯 **Target:** ${finalData.target}\n` +
-          `🏠 **Type:** ${finalData.propertyType}\n` +
+          `🏠 **Property Type:** ${finalData.propertyType}\n` +
           `💰 **Price Rank:** ${finalData.priceRank}\n` +
           `📍 **Area:** ${finalData.area || 'N/A'}\n` +
           `📝 **Remark:** ${finalData.remark || 'None'}`;
 
-        bot.sendMessage(groupId, groupMsg, { parse_mode: 'Markdown' }).catch(err => console.error('Group Send Error:', err.message));
+        bot.sendMessage(groupId, clientTopicMsg, { 
+          parse_mode: 'Markdown',
+          message_thread_id: parseInt(topicClientId) // Posts specifically into Client Topic
+        }).catch(err => console.error('Telegram Group Topic Error:', err.message));
       }
 
-      // 3. Post data to Google Sheets
+      // C. Post Row into Google Sheets
       if (sheetUrl) {
         try {
           await axios.post(sheetUrl, finalData);
         } catch (err) {
-          console.error('Google Sheet Error:', err.message);
+          console.error('Google Sheet Sync Error:', err.message);
         }
       }
     }
   }
 });
 
-// Inline Keyboard Button Handlers
+// Inline Keyboard Callbacks
 bot.on('callback_query', async (query) => {
   const chatId = query.message.chat.id;
   const session = userSessions[chatId];
   const data = query.data;
 
-  // Handle Target Selection (Buy / Rent)
+  // Target Selected (Buy or Rent)
   if (session && session.step === 'TARGET' && data.startsWith('target_')) {
     session.target = data.replace('target_', '');
     session.step = 'PROPERTY_TYPE';
@@ -172,7 +176,7 @@ bot.on('callback_query', async (query) => {
     });
   }
 
-  // Handle Property Type Selection
+  // Property Type Selected
   if (session && session.step === 'PROPERTY_TYPE' && data.startsWith('pt_')) {
     session.propertyType = data.replace('pt_', '');
     session.step = 'PRICE_RANK';
@@ -181,14 +185,14 @@ bot.on('callback_query', async (query) => {
   }
 });
 
-// Express Web Server Setup
+// Express Web Server
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('Twenty5 Realty Bot is running successfully!');
+  res.send('Twenty5 Realty Bot is active!');
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log('Server is active on port ' + PORT);
+  console.log('Server is running on port ' + PORT);
 });
