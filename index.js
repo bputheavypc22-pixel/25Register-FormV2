@@ -127,22 +127,21 @@ bot.on('message', async (msg) => {
         { parse_mode: 'Markdown', ...mainMenuKeyboard }
       );
 
-      // B. Send Alert directly into TOPIC_CLIENT_ID in your Group
+      // B. Send Alert directly into TOPIC_CLIENT_ID in your Group (Plain Text Format)
       if (groupId && topicClientId) {
         const clientTopicMsg = 
-          `🚨 **NEW CLIENT INQUIRY!**\n\n` +
-          `👤 **Name:** ${finalData.name}\n` +
-          `📱 **Tel:** ${finalData.tel1}\n` +
-          `✈️ **Telegram:** ${finalData.telegram}\n` +
-          `🎯 **Target:** ${finalData.target}\n` +
-          `🏠 **Property Type:** ${finalData.propertyType}\n` +
-          `💰 **Price Rank:** ${finalData.priceRank}\n` +
-          `📍 **Area:** ${finalData.area || 'N/A'}\n` +
-          `📝 **Remark:** ${finalData.remark || 'None'}`;
+          `🚨 NEW CLIENT INQUIRY!\n\n` +
+          `👤 Name: ${finalData.name}\n` +
+          `📱 Tel: ${finalData.tel1}\n` +
+          `✈️ Telegram: ${finalData.telegram}\n` +
+          `🎯 Target: ${finalData.target}\n` +
+          `🏠 Property Type: ${finalData.propertyType}\n` +
+          `💰 Price Rank: ${finalData.priceRank}\n` +
+          `📍 Area: ${finalData.area || 'N/A'}\n` +
+          `📝 Remark: ${finalData.remark || 'None'}`;
 
         try {
           await bot.sendMessage(groupId, clientTopicMsg, { 
-            parse_mode: 'Markdown',
             message_thread_id: Number(topicClientId)
           });
           console.log('✅ Successfully posted to Telegram Group Topic!');
