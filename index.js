@@ -43,6 +43,11 @@ bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
 
+  // Print Group Chat ID to console if any message is sent in the group
+  if (msg.chat.type === 'group' || msg.chat.type === 'supergroup') {
+    console.log(`📌 REAL GROUP ID DETECTED: ${msg.chat.id}`);
+  }
+
   if (!text) return;
 
   // 1. Contact Us Button
@@ -135,13 +140,20 @@ bot.on('message', async (msg) => {
           `📍 **Area:** ${finalData.area || 'N/A'}\n` +
           `📝 **Remark:** ${finalData.remark || 'None'}`;
 
-        bot.sendMessage(groupId, clientTopicMsg, { 
-          parse_mode: 'Markdown',
-          message_thread_id: parseInt(topicClientId) // Posts specifically into Client Topic
-        }).catch(err => console.error('Telegram Group Topic Error:', err.message));
+        try {
+          await bot.sendMessage(groupId, clientTopicMsg, { 
+            parse_mode: 'Markdown',
+            message_thread_id: Number(topicClientId)
+          });
+          console.log('✅ Successfully posted to Telegram Group Topic!');
+        } catch (err) {
+          console.error('❌ TELEGRAM GROUP ERROR:', err.response ? err.response.body : err.message);
+        }
+      } else {
+        console.log('⚠️ Skipped group send: groupId or topicClientId missing in Render settings.');
       }
 
-      // C. Post Row into Google Sheets using native fetch
+      // C. Post Row into Google Sheets
       if (sheetUrl) {
         try {
           await fetch(sheetUrl, {
@@ -149,8 +161,9 @@ bot.on('message', async (msg) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(finalData)
           });
+          console.log('✅ Successfully posted to Google Sheet!');
         } catch (err) {
-          console.error('Google Sheet Sync Error:', err.message);
+          console.error('❌ Google Sheet Sync Error:', err.message);
         }
       }
     }
