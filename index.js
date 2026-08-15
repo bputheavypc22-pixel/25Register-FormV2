@@ -7,9 +7,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Fetch environment variables from Render
+// Fetch environment variables with hardcoded fallback
 const TOKEN = process.env.BOT_TOKEN;
-const WEB_APP_URL = process.env.WEB_APP_URL; 
+const WEB_APP_URL = process.env.WEB_APP_URL || "https://bputheavypc22-pixel.github.io/25Register-FormV2/"; 
 const SCRIPT_URL = process.env.SCRIPT_URL;
 const GROUP_CHAT_ID = process.env.GROUP_CHAT_ID;
 const TOPIC_ID = process.env.TOPIC_ID ? parseInt(process.env.TOPIC_ID) : null;
