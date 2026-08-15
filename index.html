@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Twenty5 Realty - Client Inquiry Form</title>
-    <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -13,7 +12,6 @@
             --bg-color: #F8FAFC;
             --card-bg: #FFFFFF;
             --text-color: #1E293B;
-            --text-muted: #64748B;
             --border-color: #E2E8F0;
             --radius: 12px;
         }
@@ -42,31 +40,10 @@
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
         }
 
-        .logo-wrapper {
-            margin-bottom: 10px;
-        }
-
-        .logo-img {
-            max-height: 65px;
-            max-width: 180px;
-            object-fit: contain;
-        }
-
-        .brand-title {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #F8FAFC;
-        }
-
-        .brand-tagline {
-            font-size: 13px;
-            color: var(--accent-color);
-            font-weight: 600;
-            margin-top: 2px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .logo-wrapper { margin-bottom: 10px; }
+        .logo-img { max-height: 65px; max-width: 180px; object-fit: contain; }
+        .brand-title { font-size: 22px; font-weight: 700; color: #F8FAFC; }
+        .brand-tagline { font-size: 13px; color: var(--accent-color); font-weight: 600; margin-top: 2px; text-transform: uppercase; }
 
         .contact-pills {
             display: flex;
@@ -77,12 +54,7 @@
             font-size: 11px;
         }
 
-        .pill {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 4px 10px;
-            border-radius: 20px;
-            color: #CBD5E1;
-        }
+        .pill { background: rgba(255, 255, 255, 0.1); padding: 4px 10px; border-radius: 20px; color: #CBD5E1; }
 
         .form-card {
             background-color: var(--card-bg);
@@ -102,35 +74,14 @@
             display: inline-block;
         }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
+        .form-row { display: flex; gap: 12px; }
+        .form-row .form-group { flex: 1; }
 
-        .form-row {
-            display: flex;
-            gap: 12px;
-        }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+        label .required { color: #EF4444; }
 
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 6px;
-        }
-
-        label .required {
-            color: #EF4444;
-        }
-
-        input[type="text"],
-        input[type="tel"],
-        select,
-        textarea {
+        input[type="text"], input[type="tel"], select, textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border-color);
@@ -138,7 +89,6 @@
             font-size: 14px;
             color: var(--text-color);
             background-color: #F8FAFC;
-            transition: border-color 0.2s, background-color 0.2s;
             outline: none;
         }
 
@@ -147,10 +97,7 @@
             background-color: #FFFFFF;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 70px;
-        }
+        textarea { resize: vertical; min-height: 70px; }
 
         .submit-btn {
             width: 100%;
@@ -163,21 +110,13 @@
             border-radius: 8px;
             cursor: pointer;
             margin-top: 10px;
-            box-shadow: 0 4px 10px rgba(217, 119, 6, 0.25);
-            transition: background-color 0.2s;
-        }
-
-        .submit-btn:active {
-            background-color: #B45309;
         }
     </style>
 </head>
 <body>
 
-    <!-- Header & Brand Logo -->
     <div class="header-card">
         <div class="logo-wrapper">
-            <!-- If logo.png exists in your repo it displays, otherwise brand text renders -->
             <img src="logo.png" alt="Twenty5 Realty Logo" class="logo-img" onerror="this.style.display='none'">
         </div>
         <div class="brand-title">TWENTY5 REALTY</div>
@@ -188,11 +127,8 @@
         </div>
     </div>
 
-    <!-- Inquiry Form -->
     <div class="form-card">
         <form id="inquiryForm">
-            
-            <!-- Personal Contact Details -->
             <div class="section-title">👤 Contact Information</div>
             
             <div class="form-group">
@@ -215,7 +151,6 @@
                 </div>
             </div>
 
-            <!-- Property Requirements -->
             <div class="section-title" style="margin-top: 10px;">🏠 Property Details</div>
 
             <div class="form-row">
@@ -252,7 +187,6 @@
                 </div>
             </div>
 
-            <!-- Detailed Specifications -->
             <div class="section-title" style="margin-top: 10px;">📐 Property Specs</div>
 
             <div class="form-row">
@@ -311,7 +245,7 @@
                 <textarea id="notes" placeholder="Write any specific preferences or questions here..."></textarea>
             </div>
 
-            <button type="submit" class="submit-btn" id="submitBtn">Submit Inquiry</button>
+            <button type="submit" class="submit-btn">Submit Inquiry</button>
         </form>
     </div>
 
@@ -342,7 +276,6 @@
             };
 
             if (tg) {
-                // Send data directly back to Telegram Bot via WebApp.sendData
                 tg.sendData(JSON.stringify(formData));
             } else {
                 alert('Submission successful! (Preview mode outside Telegram)');
@@ -352,226 +285,3 @@
     </script>
 </body>
 </html>
-```eof
-
-```javascript:index.js
-const { Telegraf } = require('telegraf');
-const axios = require('axios');
-
-// Environment variables or config
-const BOT_TOKEN = process.env.BOT_TOKEN;
-const GROUP_CHAT_ID = process.env.GROUP_CHAT_ID; // Your Telegram Group Chat ID
-const INQUIRIES_TOPIC_ID = process.env.INQUIRIES_TOPIC_ID || 2; // Topic ID for Client Inquiries
-const GOOGLE_SHEET_WEBHOOK_URL = process.env.GOOGLE_SHEET_WEBHOOK_URL; // Google Apps Script URL
-
-const WEB_APP_URL = 'https://YOUR-GITHUB-USERNAME.github.io/25Register-FormV2/'; // Replace with your actual GitHub Pages URL
-
-const bot = new Telegraf(BOT_TOKEN);
-
-// Official Contact Details Constant
-const OFFICIAL_CONTACTS = {
-    calls: '012 800 885 | 081 82 92 94',
-    telegram: 't.me/twenty5realty',
-    email: 'twenty5realty@gmail.com',
-    website: '25realtykh.com',
-    facebook: 'https://www.facebook.com/share/1MZnRgxuYE/'
-};
-
-// Start Command
-bot.start((ctx) => {
-    ctx.reply(
-        `👋 Welcome to *Twenty5 Realty*!\n\nPlease tap the button below to fill out our Client Inquiry Form.`,
-        {
-            parse_mode: 'Markdown',
-            reply_markup: {
-                keyboard: [
-                    [
-                        {
-                            text: '📋 Open Registration Form',
-                            web_app: { url: WEB_APP_URL }
-                        }
-                    ]
-                ],
-                resize_keyboard: true
-            }
-        }
-    );
-});
-
-// Handle Telegram WebApp Data Submission
-bot.on('message', async (ctx) => {
-    if (ctx.message && ctx.message.web_app_data) {
-        try {
-            const rawData = ctx.message.web_app_data.data;
-            const data = JSON.parse(rawData);
-
-            const user = ctx.from;
-            const tgUsername = user.username ? `@${user.username}` : 'No Username';
-            const clientName = data.fullName || `${user.first_name} ${user.last_name || ''}`.trim();
-
-            // 1. Format Detailed Summary for Telegram Group (Client Inquiries Topic)
-            const summaryMessage = 
-`🚨 *NEW CLIENT INQUIRY* 🚨
-
-👤 *Client Information:*
-• *Name:* ${clientName}
-• *Phone:* ${data.phone}
-• *Preferred Contact:* ${data.preferredContact}
-• *Telegram User:* ${tgUsername} (ID: \`${user.id}\`)
-
-🏠 *Property Preferences:*
-• *Property Type:* ${data.propertyType}
-• *Purpose:* ${data.purpose}
-• *Budget:* ${data.budget}
-• *Location:* ${data.location}
-
-📐 *Detailed Specs:*
-• *Bedrooms:* ${data.bedrooms}
-• *Bathrooms:* ${data.bathrooms}
-• *Parking Space:* ${data.parking}
-• *Facing Direction:* ${data.direction}
-
-📝 *Notes / Special Requests:*
-${data.notes}
-
-⏰ *Submitted At:* ${data.submittedAt}`;
-
-            // Send to Group Topic (Topic ID 2)
-            if (GROUP_CHAT_ID) {
-                await ctx.telegram.sendMessage(GROUP_CHAT_ID, summaryMessage, {
-                    parse_mode: 'Markdown',
-                    message_thread_id: parseInt(INQUIRIES_TOPIC_ID)
-                });
-            }
-
-            // 2. Send Direct Confirmation to Client Chat with Official Contact Info
-            const clientConfirmation = 
-`✅ *Thank you for your inquiry, ${clientName}!*
-
-We have received your request for a *${data.propertyType}* (${data.purpose}). One of our property advisors will get back to you shortly.
-
-📞 *Need immediate assistance? Reach us at:*
-• *Call:* ${OFFICIAL_CONTACTS.calls}
-• *Telegram:* ${OFFICIAL_CONTACTS.telegram}
-• *Email:* ${OFFICIAL_CONTACTS.email}
-• *Website:* [${OFFICIAL_CONTACTS.website}](https://${OFFICIAL_CONTACTS.website})
-• *Facebook:* [Twenty5 Realty Page](${OFFICIAL_CONTACTS.facebook})`;
-
-            await ctx.reply(clientConfirmation, {
-                parse_mode: 'Markdown',
-                disable_web_page_preview: true
-            });
-
-            // 3. Post complete data to Google Sheets via Webhook
-            if (GOOGLE_SHEET_WEBHOOK_URL) {
-                const sheetPayload = {
-                    submittedAt: data.submittedAt,
-                    fullName: clientName,
-                    phone: data.phone,
-                    preferredContact: data.preferredContact,
-                    telegramUser: tgUsername,
-                    telegramId: user.id,
-                    propertyType: data.propertyType,
-                    purpose: data.purpose,
-                    budget: data.budget,
-                    location: data.location,
-                    bedrooms: data.bedrooms,
-                    bathrooms: data.bathrooms,
-                    parking: data.parking,
-                    direction: data.direction,
-                    notes: data.notes
-                };
-
-                await axios.post(GOOGLE_SHEET_WEBHOOK_URL, sheetPayload).catch(err => {
-                    console.error('Failed sending to Google Sheet:', err.message);
-                });
-            }
-
-        } catch (error) {
-            console.error('Error processing web_app_data:', error);
-            ctx.reply('❌ An error occurred while processing your inquiry. Please try again.');
-        }
-    }
-});
-
-bot.launch().then(() => console.log('Twenty5 Realty Bot is running...'));
-
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
-```eof
-
-```javascript:Code.gs
-// Google Apps Script for Google Sheets logging
-// Deploy this script as a Web App (Execute as: Me, Who has access: Anyone)
-
-function doPost(e) {
-  try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Client Inquiries");
-    
-    // Create sheet if it does not exist and write header row
-    if (!sheet) {
-      sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("Client Inquiries");
-      sheet.appendRow([
-        "Timestamp",
-        "Full Name",
-        "Phone Number",
-        "Preferred Contact",
-        "Telegram Username",
-        "Telegram ID",
-        "Property Type",
-        "Purpose",
-        "Budget",
-        "Location",
-        "Bedrooms",
-        "Bathrooms",
-        "Parking Space",
-        "Direction",
-        "Notes / Remarks"
-      ]);
-      sheet.getRange(1, 1, 1, 15).setFontWeight("bold").setBackground("#0F172A").setFontColor("#FFFFFF");
-    }
-
-    var data = JSON.parse(e.postData.contents);
-
-    sheet.appendRow([
-      data.submittedAt || new Date(),
-      data.fullName || "",
-      data.phone || "",
-      data.preferredContact || "",
-      data.telegramUser || "",
-      data.telegramId || "",
-      data.propertyType || "",
-      data.purpose || "",
-      data.budget || "",
-      data.location || "",
-      data.bedrooms || "",
-      data.bathrooms || "",
-      data.parking || "",
-      data.direction || "",
-      data.notes || ""
-    ]);
-
-    return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
-      .setMimeType(ContentService.MimeType.JSON);
-
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ "result": "error", "error": error.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-```eof
-
-### What Changed & Summary of Improvements:
-
-1. **`index.html` (Registration Form):**
-   * **Logo & Header:** Includes the Twenty5 Realty header card with branding and support for your `logo.png` image file.
-   * **New Spec Fields:** Added dropdowns for **Bedrooms**, **Bathrooms**, **Parking Space**, and **Direction (with Khmer translations)**.
-   * **Payload Update:** Sends all collected fields together in clean JSON back to your Telegram bot.
-
-2. **`index.js` (Telegram Bot Server):**
-   * **Telegram Group Topic Output:** Formats a complete summary report containing all client contact info, property requirements, and specs (Bedrooms, Bathrooms, Parking, Direction), and posts directly into your Client Inquiries topic (ID `2`).
-   * **Auto Confirmation:** Replies to the client with confirmation and displays your official contact numbers, Telegram link, Email, Website, and Facebook link.
-   * **Google Sheets Webhook:** Transmits every single field to Google Sheets.
-
-3. **`Code.gs` (Google Apps Script):**
-   * Updated column structure to record all 15 attributes into the `Client Inquiries` sheet tab automatically. 
