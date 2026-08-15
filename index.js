@@ -8,7 +8,7 @@ const groupId = process.env.TELEGRAM_GROUP_ID;
 const topicClientId = process.env.TOPIC_CLIENT_ID || '2';
 
 // ⚠️ REPLACE WITH YOUR ACTUAL GITHUB PAGES URL
-const WEB_APP_URL = 'https://bputheavypc22-pixel.github.io/25Register-FormV2/';
+const WEB_APP_URL = process.env.WEB_APP_URL;
 
 if (!token) {
   console.error('Error: BOT_TOKEN is missing!');
