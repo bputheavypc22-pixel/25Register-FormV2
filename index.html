@@ -1,287 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Twenty5 Realty - Client Inquiry Form</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --primary-color: #0F172A;
-            --accent-color: #D97706;
-            --bg-color: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --text-color: #1E293B;
-            --border-color: #E2E8F0;
-            --radius: 12px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 16px;
-            padding-bottom: 30px;
-        }
-
-        .header-card {
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-            color: #FFFFFF;
-            border-radius: var(--radius);
-            padding: 20px 16px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-        }
-
-        .logo-wrapper { margin-bottom: 10px; }
-        .logo-img { max-height: 65px; max-width: 180px; object-fit: contain; }
-        .brand-title { font-size: 22px; font-weight: 700; color: #F8FAFC; }
-        .brand-tagline { font-size: 13px; color: var(--accent-color); font-weight: 600; margin-top: 2px; text-transform: uppercase; }
-
-        .contact-pills {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 12px;
-            font-size: 11px;
-        }
-
-        .pill { background: rgba(255, 255, 255, 0.1); padding: 4px 10px; border-radius: 20px; color: #CBD5E1; }
-
-        .form-card {
-            background-color: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid var(--border-color);
-        }
-
-        .section-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 14px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid var(--accent-color);
-            display: inline-block;
-        }
-
-        .form-group { margin-bottom: 16px; }
-        .form-row { display: flex; gap: 12px; }
-        .form-row .form-group { flex: 1; }
-
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-        label .required { color: #EF4444; }
-
-        input[type="text"], input[type="tel"], select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            color: var(--text-color);
-            background-color: #F8FAFC;
-            outline: none;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent-color);
-            background-color: #FFFFFF;
-        }
-
-        textarea { resize: vertical; min-height: 70px; }
-
-        .submit-btn {
-            width: 100%;
-            background-color: var(--accent-color);
-            color: #FFFFFF;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>25Realty Registration Form</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f5f7;
+      margin: 0;
+      padding: 16px;
+      color: #333;
+    }
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .logo-container img {
+      max-width: 140px;
+      height: auto;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+      font-size: 20px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #555;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+      height: 70px;
+    }
+    .price-row, .grid-2 {
+      display: flex;
+      gap: 10px;
+    }
+    .price-row .form-group, .grid-2 .form-group {
+      flex: 1;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2481cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:disabled {
+      background-color: #a0c4e2;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="header-card">
-        <div class="logo-wrapper">
-            <img src="logo.png" alt="Twenty5 Realty Logo" class="logo-img" onerror="this.style.display='none'">
-        </div>
-        <div class="brand-title">TWENTY5 REALTY</div>
-        <div class="brand-tagline">Real Estate & Property Inquiry</div>
-        <div class="contact-pills">
-            <span class="pill">📞 012 800 885 / 081 82 92 94</span>
-            <span class="pill">🌐 25realtykh.com</span>
-        </div>
+  <div class="container">
+    <!-- LOGO CONTAINER -->
+    <div class="logo-container">
+      <img src="logo.png" alt="25Realty Logo">
     </div>
 
-    <div class="form-card">
-        <form id="inquiryForm">
-            <div class="section-title">👤 Contact Information</div>
-            
-            <div class="form-group">
-                <label for="fullName">Full Name <span class="required">*</span></label>
-                <input type="text" id="fullName" placeholder="Enter your full name" required>
-            </div>
+    <h2>Client Registration</h2>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="phone">Phone Number <span class="required">*</span></label>
-                    <input type="tel" id="phone" placeholder="012 xxx xxx" required>
-                </div>
-                <div class="form-group">
-                    <label for="preferredContact">Preferred Contact</label>
-                    <select id="preferredContact">
-                        <option value="Telegram">Telegram</option>
-                        <option value="Phone Call">Phone Call</option>
-                        <option value="WhatsApp">WhatsApp</option>
-                    </select>
-                </div>
-            </div>
+    <form id="inquiryForm">
+      <div class="form-group">
+        <label for="fullName">Full Name *</label>
+        <input type="text" id="fullName" required placeholder="John Doe">
+      </div>
 
-            <div class="section-title" style="margin-top: 10px;">🏠 Property Details</div>
+      <div class="form-group">
+        <label for="phone">Phone Number *</label>
+        <input type="tel" id="phone" required placeholder="012 345 678">
+      </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="propertyType">Property Type <span class="required">*</span></label>
-                    <select id="propertyType" required>
-                        <option value="">Select Type</option>
-                        <option value="Condo / Apartment">Condo / Apartment</option>
-                        <option value="Borey Villa / House">Borey Villa / House</option>
-                        <option value="Shophouse / Link House">Shophouse / Link House</option>
-                        <option value="Land / Plot">Land / Plot</option>
-                        <option value="Commercial Space / Office">Commercial / Office</option>
-                        <option value="Warehouse / Factory">Warehouse / Factory</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="purpose">Purpose <span class="required">*</span></label>
-                    <select id="purpose" required>
-                        <option value="Buy">Buy</option>
-                        <option value="Rent">Rent</option>
-                        <option value="Investment">Investment</option>
-                    </select>
-                </div>
-            </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="category">Category *</label>
+          <select id="category" required>
+            <option value="Residential">Residential</option>
+            <option value="Commercial">Commercial</option>
+            <option value="Industrial">Industrial</option>
+            <option value="Land">Land</option>
+          </select>
+        </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="budget">Budget (USD)</label>
-                    <input type="text" id="budget" placeholder="e.g. $100,000 or $500/mo">
-                </div>
-                <div class="form-group">
-                    <label for="location">Preferred Location</label>
-                    <input type="text" id="location" placeholder="e.g. BKK1, Chroy Changvar">
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="listingType">Listing Type *</label>
+          <select id="listingType" required>
+            <option value="Rent">For Rent</option>
+            <option value="Sale">For Sale</option>
+          </select>
+        </div>
+      </div>
 
-            <div class="section-title" style="margin-top: 10px;">📐 Property Specs</div>
+      <div class="form-group">
+        <label for="propertyType">Property Type *</label>
+        <input type="text" id="propertyType" required placeholder="e.g. Condo, Villa, Office">
+      </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="bedrooms">Bedrooms</label>
-                    <select id="bedrooms">
-                        <option value="Any">Any</option>
-                        <option value="Studio">Studio</option>
-                        <option value="1 Bedroom">1 Bedroom</option>
-                        <option value="2 Bedrooms">2 Bedrooms</option>
-                        <option value="3 Bedrooms">3 Bedrooms</option>
-                        <option value="4+ Bedrooms">4+ Bedrooms</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="bathrooms">Bathrooms</label>
-                    <select id="bathrooms">
-                        <option value="Any">Any</option>
-                        <option value="1 Bathroom">1 Bathroom</option>
-                        <option value="2 Bathrooms">2 Bathrooms</option>
-                        <option value="3 Bathrooms">3 Bathrooms</option>
-                        <option value="4+ Bathrooms">4+ Bathrooms</option>
-                    </select>
-                </div>
-            </div>
+      <div class="form-group">
+        <label for="location">Preferred Location *</label>
+        <input type="text" id="location" required placeholder="e.g. BKK1, Toul Kork">
+      </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="parking">Parking Space</label>
-                    <select id="parking">
-                        <option value="Any">Any</option>
-                        <option value="1 Car">1 Car</option>
-                        <option value="2 Cars">2 Cars</option>
-                        <option value="3+ Cars">3+ Cars</option>
-                        <option value="Not Required">Not Required</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="direction">Facing Direction</label>
-                    <select id="direction">
-                        <option value="Any">Any</option>
-                        <option value="North">North (ជើង)</option>
-                        <option value="South">South (ត្បូង)</option>
-                        <option value="East">East (កើត)</option>
-                        <option value="West">West (លិច)</option>
-                        <option value="North-East">North-East (ឦសាន)</option>
-                        <option value="North-West">North-West (ពាយ័ព្យ)</option>
-                        <option value="South-East">South-East (អាគ្នេយ៍)</option>
-                        <option value="South-West">South-West (និរតី)</option>
-                    </select>
-                </div>
-            </div>
+      <div class="price-row">
+        <div class="form-group">
+          <label for="minPrice">Min Budget ($) *</label>
+          <input type="number" id="minPrice" required placeholder="500">
+        </div>
+        <div class="form-group">
+          <label for="maxPrice">Max Budget ($) *</label>
+          <input type="number" id="maxPrice" required placeholder="1500">
+        </div>
+      </div>
 
-            <div class="form-group">
-                <label for="notes">Additional Requirements / Notes</label>
-                <textarea id="notes" placeholder="Write any specific preferences or questions here..."></textarea>
-            </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="bedrooms">Bedrooms</label>
+          <input type="text" id="bedrooms" placeholder="e.g. 2 or 1-2">
+        </div>
+        <div class="form-group">
+          <label for="bathrooms">Bathrooms</label>
+          <input type="text" id="bathrooms" placeholder="e.g. 2">
+        </div>
+      </div>
 
-            <button type="submit" class="submit-btn">Submit Inquiry</button>
-        </form>
-    </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="parking">Parking Space</label>
+          <input type="text" id="parking" placeholder="e.g. 1 Car">
+        </div>
+        <div class="form-group">
+          <label for="direction">Direction / Facing</label>
+          <input type="text" id="direction" placeholder="e.g. South, East">
+        </div>
+      </div>
 
-    <script>
-        const tg = window.Telegram ? window.Telegram.WebApp : null;
-        if (tg) {
-            tg.expand();
-            tg.ready();
-        }
+      <div class="form-group">
+        <label for="notes">Additional Notes</label>
+        <textarea id="notes" placeholder="Any specific requirement..."></textarea>
+      </div>
 
-        document.getElementById('inquiryForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+      <button type="submit" id="submitBtn">Submit Inquiry</button>
+    </form>
+  </div>
 
-            const formData = {
-                fullName: document.getElementById('fullName').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                preferredContact: document.getElementById('preferredContact').value,
-                propertyType: document.getElementById('propertyType').value,
-                purpose: document.getElementById('purpose').value,
-                budget: document.getElementById('budget').value.trim() || 'N/A',
-                location: document.getElementById('location').value.trim() || 'Any Location',
-                bedrooms: document.getElementById('bedrooms').value,
-                bathrooms: document.getElementById('bathrooms').value,
-                parking: document.getElementById('parking').value,
-                direction: document.getElementById('direction').value,
-                notes: document.getElementById('notes').value.trim() || 'None',
-                submittedAt: new Date().toLocaleString('en-US', { timeZone: 'Asia/Phnom_Penh' })
-            };
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // Expand Mini App to full height
 
-            if (tg) {
-                tg.sendData(JSON.stringify(formData));
-            } else {
-                alert('Submission successful! (Preview mode outside Telegram)');
-                console.log('Form Data:', formData);
-            }
+    // Auto-fill full name if available from Telegram
+    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      const user = tg.initDataUnsafe.user;
+      const autoName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+      if (autoName) {
+        document.getElementById('fullName').value = autoName;
+      }
+    }
+
+    const form = document.getElementById('inquiryForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Submitting...';
+
+      const user = tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
+
+      const formData = {
+        chat_id: user ? user.id : null,
+        telegramUser: user ? (user.username || user.first_name) : 'Anonymous',
+        fullName: document.getElementById('fullName').value,
+        phone: document.getElementById('phone').value,
+        category: document.getElementById('category').value,
+        listingType: document.getElementById('listingType').value,
+        propertyType: document.getElementById('propertyType').value,
+        location: document.getElementById('location').value,
+        minPrice: document.getElementById('minPrice').value,
+        maxPrice: document.getElementById('maxPrice').value,
+        bedrooms: document.getElementById('bedrooms').value,
+        bathrooms: document.getElementById('bathrooms').value,
+        parking: document.getElementById('parking').value,
+        direction: document.getElementById('direction').value,
+        notes: document.getElementById('notes').value
+      };
+
+      try {
+        // Submit directly to your Render backend endpoint
+        const response = await fetch('https://two5register-formv2.onrender.com/submit-form', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
         });
-    </script>
+
+        if (response.ok) {
+          tg.close(); // Close Telegram Mini App on success
+        } else {
+          alert('Failed to submit form. Please try again.');
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Submit Inquiry';
+        }
+      } catch (err) {
+        console.error(err);
+        alert('An error occurred. Please check your connection.');
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Submit Inquiry';
+      }
+    });
+  </script>
 </body>
 </html>
