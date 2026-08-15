@@ -1,18 +1,15 @@
 {
-  "name": "twenty5-realty-v2",
+  "name": "25register-formv2",
   "version": "1.0.0",
-  "description": "",
+  "description": "25Realty Telegram Mini App Form",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "node-telegram-bot-api": "^1.2.0"
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "node-telegram-bot-api": "^0.66.0"
   }
 }
