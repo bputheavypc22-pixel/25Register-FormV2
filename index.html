@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Inquiry Form</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--tg-theme-bg-color, #ffffff);
+      color: var(--tg-theme-text-color, #222222);
+      padding: 16px;
+      margin: 0;
+    }
+    h2 { margin-top: 0; text-align: center; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 14px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+      background-color: var(--tg-theme-secondary-bg-color, #f5f5f5);
+      color: var(--tg-theme-text-color, #222);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--tg-theme-button-color, #2481cc);
+      color: var(--tg-theme-button-text-color, #ffffff);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📋 Client Inquiry Form</h2>
+
+  <div class="form-group">
+    <label>Full Name *</label>
+    <input type="text" id="name" placeholder="Enter full name" required>
+  </div>
+
+  <div class="form-group">
+    <label>Phone Number (Tel 1) *</label>
+    <input type="tel" id="tel1" placeholder="Enter phone number" required>
+  </div>
+
+  <div class="form-group">
+    <label>Target Goal *</label>
+    <select id="target">
+      <option value="Buy">Buy</option>
+      <option value="Rent">Rent</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Property Type *</label>
+    <select id="propertyType">
+      <option value="Condo">Condo</option>
+      <option value="Villa">Villa</option>
+      <option value="House">Borey / House</option>
+      <option value="Land">Land</option>
+      <option value="Commercial">Commercial</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Price Rank / Budget *</label>
+    <input type="text" id="priceRank" placeholder="e.g. $50,000 - $100,000 or $500/mo" required>
+  </div>
+
+  <div class="form-group">
+    <label>Preferred Area / Location</label>
+    <input type="text" id="area" placeholder="e.g. BKK1, Toul Kork">
+  </div>
+
+  <div class="form-group">
+    <label>Remarks / Specific Requirements</label>
+    <textarea id="remark" rows="3" placeholder="Any additional preferences..."></textarea>
+  </div>
+
+  <button onclick="submitForm()">Submit Inquiry</button>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // Expand Web App to full height
+
+    function submitForm() {
+      const name = document.getElementById('name').value.trim();
+      const tel1 = document.getElementById('tel1').value.trim();
+      const priceRank = document.getElementById('priceRank').value.trim();
+
+      if (!name || !tel1 || !priceRank) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      const formData = {
+        name: name,
+        tel1: tel1,
+        target: document.getElementById('target').value,
+        propertyType: document.getElementById('propertyType').value,
+        priceRank: priceRank,
+        area: document.getElementById('area').value.trim() || 'N/A',
+        remark: document.getElementById('remark').value.trim() || 'None'
+      };
+
+      // Send JSON payload back to Telegram Bot
+      tg.sendData(JSON.stringify(formData));
+    }
+  </script>
+</body>
+</html>
