@@ -5,10 +5,10 @@ const express = require('express');
 const token = process.env.BOT_TOKEN;
 const sheetUrl = process.env.GOOGLE_SHEET_URL; 
 const groupId = process.env.TELEGRAM_GROUP_ID;  
-const topicClientId = process.env.TOPIC_CLIENT_ID;
+const topicClientId = process.env.TOPIC_CLIENT_ID || '2';
 
-// ⚠️ REPLACE THIS WITH YOUR ACTUAL GITHUB PAGES URL
-const WEB_APP_URL = 'https://bputheavypc22-pixel.github.io/25Register-FormV2/';
+// ⚠️ REPLACE WITH YOUR ACTUAL GITHUB PAGES URL
+const WEB_APP_URL = 'https://YOUR-GITHUB-USERNAME.github.io/25Register-FormV2/';
 
 if (!token) {
   console.error('Error: BOT_TOKEN is missing!');
@@ -21,7 +21,7 @@ const bot = new (TelegramBot.default || TelegramBot)(token, { polling: true });
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    '👋 Welcome to **Twenty5 Realty**!\n\nClick below to submit a new client inquiry:',
+    '👋 Welcome to **Twenty5 Realty**!\n\nPlease tap the button below to submit a new client inquiry:',
     {
       parse_mode: 'Markdown',
       reply_markup: {
@@ -39,64 +39,95 @@ bot.onText(/\/start/, (msg) => {
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
 
-  // 1. Contact Us Button
+  // Contact Us Button
   if (msg.text === '📞 Contact Us') {
     return bot.sendMessage(
       chatId, 
       '📞 **Twenty5 Realty Support**\n\n' +
-      '📱 Phone: +855 12 345 678\n' +
-      '🌐 Website: twenty5realty.com', 
+      '📱 Call: 012 800 885 | 081 82 92 94\n' +
+      '✈️ Telegram: t.me/twenty5realty\n' +
+      '✉️ Email: twenty5realty@gmail.com\n' +
+      '🌐 Website: 25realtykh.com\n' +
+      '📘 Facebook: https://www.facebook.com/share/1MZnRgxuYE/', 
       { parse_mode: 'Markdown' }
     );
   }
 
-  // 2. Catch Web App Data Event
+  // Handle Web App Data Event
   if (msg.web_app_data && msg.web_app_data.data) {
     try {
-      const finalData = JSON.parse(msg.web_app_data.data);
-      finalData.telegram = msg.from.username ? `@${msg.from.username}` : msg.from.first_name;
+      const data = JSON.parse(msg.web_app_data.data);
+      const tgUsername = msg.from.username ? `@${msg.from.username}` : msg.from.first_name;
 
-      // A. Send confirmation to user
+      // 1. Send Direct Confirmation to Client Chat
       await bot.sendMessage(
         chatId,
         `✅ **Inquiry Recorded Successfully!**\n\n` +
-        `👤 **Name:** ${finalData.name}\n` +
-        `📱 **Tel 1:** ${finalData.tel1}\n` +
-        `🎯 **Target:** ${finalData.target}\n` +
-        `🏠 **Type:** ${finalData.propertyType}\n` +
-        `💰 **Price Rank:** ${finalData.priceRank}\n` +
-        `📍 **Area:** ${finalData.area}\n` +
-        `📝 **Remark:** ${finalData.remark}`,
+        `👤 **Name:** ${data.fullName}\n` +
+        `📱 **Phone:** ${data.phone}\n` +
+        `🎯 **Purpose:** ${data.purpose}\n` +
+        `🏠 **Type:** ${data.propertyType}\n` +
+        `💰 **Budget:** ${data.budget}\n` +
+        `📍 **Location:** ${data.location}\n` +
+        `🛏️ **Bedrooms:** ${data.bedrooms}\n` +
+        `🚿 **Bathrooms:** ${data.bathrooms}\n` +
+        `🚗 **Parking:** ${data.parking}\n` +
+        `🧭 **Direction:** ${data.direction}\n` +
+        `📝 **Notes:** ${data.notes}\n\n` +
+        `📞 **Need help?** Call 012 800 885 | 081 82 92 94`,
         { parse_mode: 'Markdown' }
       );
 
-      // B. Send Plain Text Alert to Telegram Group Topic
+      // 2. Send Full Detailed Alert to Telegram Group Topic
       if (groupId && topicClientId) {
         const clientTopicMsg = 
           `🚨 NEW CLIENT INQUIRY!\n\n` +
-          `👤 Name: ${finalData.name}\n` +
-          `📱 Tel: ${finalData.tel1}\n` +
-          `✈️ Telegram: ${finalData.telegram}\n` +
-          `🎯 Target: ${finalData.target}\n` +
-          `🏠 Property Type: ${finalData.propertyType}\n` +
-          `💰 Price Rank: ${finalData.priceRank}\n` +
-          `📍 Area: ${finalData.area}\n` +
-          `📝 Remark: ${finalData.remark}`;
+          `👤 Name: ${data.fullName}\n` +
+          `📱 Phone: ${data.phone}\n` +
+          `☎️ Preferred Contact: ${data.preferredContact}\n` +
+          `✈️ Telegram User: ${tgUsername}\n\n` +
+          `🏠 Property Type: ${data.propertyType}\n` +
+          `🎯 Purpose: ${data.purpose}\n` +
+          `💰 Budget: ${data.budget}\n` +
+          `📍 Location: ${data.location}\n\n` +
+          `🛏️ Bedrooms: ${data.bedrooms}\n` +
+          `🚿 Bathrooms: ${data.bathrooms}\n` +
+          `🚗 Parking Space: ${data.parking}\n` +
+          `🧭 Direction: ${data.direction}\n\n` +
+          `📝 Notes: ${data.notes}\n` +
+          `⏰ Submitted At: ${data.submittedAt}`;
 
         await bot.sendMessage(groupId, clientTopicMsg, { 
           message_thread_id: Number(topicClientId)
         });
-        console.log('✅ Posted Mini App Lead to Group Topic');
+        console.log('✅ Posted complete inquiry to Telegram Group Topic');
       }
 
-      // C. Append to Google Sheet
+      // 3. Post Full Payload into Google Sheet
       if (sheetUrl) {
+        const sheetPayload = {
+          submittedAt: data.submittedAt,
+          fullName: data.fullName,
+          phone: data.phone,
+          preferredContact: data.preferredContact,
+          telegramUser: tgUsername,
+          propertyType: data.propertyType,
+          purpose: data.purpose,
+          budget: data.budget,
+          location: data.location,
+          bedrooms: data.bedrooms,
+          bathrooms: data.bathrooms,
+          parking: data.parking,
+          direction: data.direction,
+          notes: data.notes
+        };
+
         await fetch(sheetUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(finalData)
+          body: JSON.stringify(sheetPayload)
         });
-        console.log('✅ Posted Mini App Lead to Google Sheet');
+        console.log('✅ Posted complete inquiry to Google Sheet');
       }
 
     } catch (err) {
@@ -105,12 +136,12 @@ bot.on('message', async (msg) => {
   }
 });
 
-// Express Web Server
+// Express Server
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('Twenty5 Realty Mini App Bot is active!');
+  res.send('Twenty5 Realty Bot is active!');
 });
 
 app.listen(PORT, '0.0.0.0', () => {
