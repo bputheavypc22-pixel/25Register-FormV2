@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Environment variable mapping with flexible fallbacks matching your Render config
+// Fetch Environment Variables
 const TOKEN = process.env.BOT_TOKEN;
 
 const WEB_APP_URL = 
@@ -28,11 +28,17 @@ const TOPIC_ID =
   process.env.TOPIC_CLIENT_ID ? 
   parseInt(process.env.TOPIC_ID || process.env.TOPIC_CLIENT_ID) : null;
 
+// Helper function to escape special Markdown characters safely
+function cleanText(str) {
+  if (!str) return 'N/A';
+  return String(str).replace(/[*_`\[\]]/g, '');
+}
+
 // Initialize Telegram Bot
 const bot = new TelegramBot(TOKEN, { polling: true });
 
 app.get('/', (req, res) => {
-  res.send('25Realty Backend Server is running active.');
+  res.send('25Realty Backend Server is active and running!');
 });
 
 bot.onText(/\/start/, (msg) => {
@@ -50,49 +56,67 @@ app.post('/submit-form', async (req, res) => {
   console.log("Form payload received:", req.body);
   const data = req.body;
 
-  // 1. Direct Message to User
+  // Clean form values to prevent Markdown syntax errors
+  const name = cleanText(data.fullName);
+  const phone = cleanText(data.phone);
+  const handle = cleanText(data.telegramUser);
+  const category = cleanText(data.category);
+  const listingType = cleanText(data.listingType);
+  const propertyType = cleanText(data.propertyType);
+  const location = cleanText(data.location);
+  const minPrice = cleanText(data.minPrice);
+  const maxPrice = cleanText(data.maxPrice);
+  const bedrooms = cleanText(data.bedrooms);
+  const bathrooms = cleanText(data.bathrooms);
+  const parking = cleanText(data.parking);
+  const direction = cleanText(data.direction);
+  const notes = cleanText(data.notes);
+
+  // 1. Direct Message to Client User
   if (data.chat_id) {
-    const clientMessage = `
-✅ *Registration Received!*
+    const clientMessage = 
+`✅ Registration Received!
 
-Thank you, *${data.fullName}*, for registering with 25Realty.
+Thank you, ${name}, for registering with 25Realty.
 
-*Summary:*
-• *Phone:* ${data.phone}
-• *Telegram User:* @${data.telegramUser || 'N/A'}
-• *Category:* ${data.category}
-• *Property:* ${data.propertyType} (${data.listingType})
-• *Location:* ${data.location}
-• *Price Range:* $${data.minPrice} - $${data.maxPrice}
-• *Bedrooms:* ${data.bedrooms || 'N/A'}
-• *Bathrooms:* ${data.bathrooms || 'N/A'}
-• *Notes:* ${data.notes || 'None'}
-    `;
+Summary of Details:
+• Phone: ${phone}
+• Telegram Handle: @${handle}
+• Category: ${category}
+• Property: ${propertyType} (${listingType})
+• Location: ${location}
+• Price Range: $${minPrice} - $${maxPrice}
+• Bedrooms: ${bedrooms}
+• Bathrooms: ${bathrooms}
+• Parking: ${parking}
+• Direction: ${direction}
+• Notes: ${notes}
 
-    await bot.sendMessage(data.chat_id, clientMessage, { parse_mode: 'Markdown' })
+Our team will contact you shortly!`;
+
+    await bot.sendMessage(data.chat_id, clientMessage)
       .catch(err => console.error("Client DM Error:", err.message));
   }
 
-  // 2. Message to Telegram Group Topic
+  // 2. Alert Notification to Group / Topic
   if (GROUP_CHAT_ID) {
-    const groupMessage = `
-🚨 *NEW CLIENT INQUIRY ALERT* 🚨
+    const groupMessage = 
+`🚨 NEW CLIENT INQUIRY ALERT 🚨
 
-👤 *Client Name:* ${data.fullName}
-📞 *Phone:* ${data.phone}
-💬 *Telegram Handle:* @${data.telegramUser || 'N/A'}
-🏷️ *Category:* ${data.category}
-🏠 *Type:* ${data.propertyType} (${data.listingType})
-📍 *Location:* ${data.location}
-💰 *Budget:* $${data.minPrice} - $${data.maxPrice}
-🛏️ *Bedrooms:* ${data.bedrooms || 'N/A'}
-🚿 *Bathrooms:* ${data.bathrooms || 'N/A'}
-🚗 *Parking:* ${data.parking || 'N/A'}
-🧩 *Direction:* ${data.direction || 'N/A'}
-📝 *Notes:* ${data.notes || 'None'}
-    `;
+👤 Client Name: ${name}
+📞 Phone: ${phone}
+💬 Telegram Handle: @${handle}
+🏷️ Category: ${category}
+🏠 Type: ${propertyType} (${listingType})
+📍 Location: ${location}
+💰 Budget: $${minPrice} - $${maxPrice}
+🛏️ Bedrooms: ${bedrooms}
+🚿 Bathrooms: ${bathrooms}
+🚗 Parking: ${parking}
+🧩 Direction: ${direction}
+📝 Notes: ${notes}`;
 
-    const options = { parse_mode: 'Markdown' };
+    const options = {};
     if (TOPIC_ID) {
       options.message_thread_id = TOPIC_ID;
     }
@@ -100,10 +124,10 @@ Thank you, *${data.fullName}*, for registering with 25Realty.
     await bot.sendMessage(GROUP_CHAT_ID, groupMessage, options)
       .catch(err => console.error("Group Alert Error:", err.message));
   } else {
-    console.error("GROUP_CHAT_ID was not found in process.env");
+    console.error("GROUP_CHAT_ID not set in process.env");
   }
 
-  // 3. Google Sheets Integration
+  // 3. Google Sheets Endpoint
   if (SCRIPT_URL) {
     try {
       await fetch(SCRIPT_URL, {
@@ -115,11 +139,9 @@ Thank you, *${data.fullName}*, for registering with 25Realty.
     } catch (err) {
       console.error("Google Sheets Error:", err.message);
     }
-  } else {
-    console.error("SCRIPT_URL was not found in process.env");
   }
 
-  return res.status(200).json({ success: true, message: "Processed" });
+  return res.status(200).json({ success: true, message: "Processed successfully" });
 });
 
 const PORT = process.env.PORT || 10000;
