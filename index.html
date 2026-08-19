@@ -177,7 +177,7 @@
 
   <script>
     const tg = window.Telegram.WebApp;
-    tg.expand(); // Expand Mini App to full height
+    tg.expand();
 
     // Auto-fill full name if available from Telegram
     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -217,8 +217,8 @@
       };
 
       try {
-        // Updated to matching Render service name
-        const response = await fetch('https://25register-formv2.onrender.com/submit-form', {
+        // Matched to the exact URL displayed on your Render dashboard
+        const response = await fetch('https://two5register-formv2.onrender.com/submit-form', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -227,7 +227,7 @@
         });
 
         if (response.ok) {
-          tg.close(); // Close Telegram Mini App on success
+          tg.close();
         } else {
           alert('Failed to submit form. Please try again.');
           submitBtn.disabled = false;
