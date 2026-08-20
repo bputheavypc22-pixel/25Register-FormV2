@@ -61,16 +61,23 @@ app.post('/submit-form', async (req, res) => {
   const phone1 = cleanText(data.phone);
   const phone2 = cleanText(data.phone2);
   
-  // Combine Phone Numbers into a single string
+  // Combine Phone Numbers into a single string for Telegram
   let phoneSummary = phone1 || 'N/A';
   if (phone2) {
     phoneSummary += `, ${phone2}`;
   }
 
+  // Combine Locations into a single wrapped string for Telegram
+  const loc1 = cleanText(data.location);
+  const loc2 = cleanText(data.location2);
+  let locationSummary = loc1 || 'N/A';
+  if (loc2) {
+    locationSummary += `, ${loc2}`;
+  }
+
   const handle = cleanText(data.telegramUser) || 'N/A';
   const target = cleanText(data.target) || 'N/A';
   const propertyType = cleanText(data.propertyType) || 'N/A';
-  const location = cleanText(data.location) || 'N/A';
   const minPrice = cleanText(data.minPrice) || '0';
   const maxPrice = cleanText(data.maxPrice) || '0';
   const bedrooms = cleanText(data.bedrooms) || 'N/A';
@@ -91,7 +98,7 @@ Summary of Details:
 • Telegram Handle: @${handle}
 • Target: ${target}
 • Property Type: ${propertyType}
-• Location: ${location}
+• Preferred Location: ${locationSummary}
 • Price Range: $${minPrice} - $${maxPrice}
 • Bedrooms: ${bedrooms}
 • Bathrooms: ${bathrooms}
@@ -115,10 +122,10 @@ Our team will contact you shortly!`;
 💬 Telegram Handle: @${handle}
 🏷️ Target: ${target}
 🏠 Type: ${propertyType}
-📍 Location: ${location}
+📍 Location: ${locationSummary}
 💰 Budget: $${minPrice} - $${maxPrice}
 🛏️ Bedrooms: ${bedrooms}
-🚿 Bathrooms: ${bathrooms}
+0️⃣ Bathrooms: ${bathrooms}
 🚗 Parking: ${parking}
 🧩 Direction: ${direction}
 📝 Notes: ${notes}`;
