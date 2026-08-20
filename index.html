@@ -104,17 +104,27 @@
 
       <div class="grid-2">
         <div class="form-group">
+          <label for="listingType">Listing Type *</label>
+          <select id="listingType" required>
+            <option value="Residential">Residential</option>
+            <option value="Commercial">Commercial</option>
+            <option value="Industrial">Industrial</option>
+            <option value="Land">Land</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label for="target">Target *</label>
           <select id="target" required>
             <option value="Rent">For Rent</option>
             <option value="Buy">For Sale / Buy</option>
           </select>
         </div>
+      </div>
 
-        <div class="form-group">
-          <label for="propertyType">Property Type *</label>
-          <input type="text" id="propertyType" required placeholder="e.g. Condo, Villa, Office">
-        </div>
+      <div class="form-group">
+        <label for="propertyType">Property Type *</label>
+        <input type="text" id="propertyType" required placeholder="e.g. Condo, Villa, Office">
       </div>
 
       <div class="form-group">
@@ -191,6 +201,7 @@
         telegramUser: user ? (user.username || user.first_name) : 'Anonymous',
         fullName: document.getElementById('fullName').value,
         phone: document.getElementById('phone').value,
+        listingType: document.getElementById('listingType').value,
         target: document.getElementById('target').value,
         propertyType: document.getElementById('propertyType').value,
         location: document.getElementById('location').value,
