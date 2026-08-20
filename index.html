@@ -129,9 +129,15 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="location">Preferred Location *</label>
-        <input type="text" id="location" required placeholder="e.g. BKK1, Toul Kork">
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="location">Preferred Location 1 *</label>
+          <input type="text" id="location" required placeholder="e.g. BKK1">
+        </div>
+        <div class="form-group">
+          <label for="location2">Preferred Location 2</label>
+          <input type="text" id="location2" placeholder="e.g. Toul Kork">
+        </div>
       </div>
 
       <div class="price-row">
@@ -207,6 +213,7 @@
         propertyType: document.getElementById('propertyType').value,
         target: document.getElementById('target').value,
         location: document.getElementById('location').value,
+        location2: document.getElementById('location2').value,
         minPrice: document.getElementById('minPrice').value,
         maxPrice: document.getElementById('maxPrice').value,
         bedrooms: document.getElementById('bedrooms').value,
