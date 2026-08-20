@@ -97,9 +97,15 @@
         <input type="text" id="fullName" required placeholder="John Doe">
       </div>
 
-      <div class="form-group">
-        <label for="phone">Phone Number *</label>
-        <input type="tel" id="phone" required placeholder="012 345 678">
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="phone">Phone Number 1 *</label>
+          <input type="tel" id="phone" required placeholder="012 345 678">
+        </div>
+        <div class="form-group">
+          <label for="phone2">Phone Number 2</label>
+          <input type="tel" id="phone2" placeholder="098 765 432">
+        </div>
       </div>
 
       <div class="grid-2">
@@ -197,6 +203,7 @@
         telegramUser: user ? (user.username || user.first_name) : 'Anonymous',
         fullName: document.getElementById('fullName').value,
         phone: document.getElementById('phone').value,
+        phone2: document.getElementById('phone2').value,
         propertyType: document.getElementById('propertyType').value,
         target: document.getElementById('target').value,
         location: document.getElementById('location').value,
