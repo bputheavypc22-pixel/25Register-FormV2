@@ -28,10 +28,10 @@ const TOPIC_ID =
   process.env.TOPIC_CLIENT_ID ? 
   parseInt(process.env.TOPIC_ID || process.env.TOPIC_CLIENT_ID) : null;
 
-// Helper function to escape special Markdown characters safely
+// Helper function to escape special formatting characters safely
 function cleanText(str) {
-  if (!str) return 'N/A';
-  return String(str).replace(/[*_`\[\]]/g, '');
+  if (!str) return '';
+  return String(str).replace(/[*_`\[\]]/g, '').trim();
 }
 
 // Initialize Telegram Bot
@@ -56,21 +56,28 @@ app.post('/submit-form', async (req, res) => {
   console.log("Form payload received:", req.body);
   const data = req.body;
 
-  // Clean form values to prevent Markdown syntax errors
-  const name = cleanText(data.fullName);
-  const phone = cleanText(data.phone);
-  const handle = cleanText(data.telegramUser);
-  const category = cleanText(data.category);
-  const listingType = cleanText(data.listingType);
-  const propertyType = cleanText(data.propertyType);
-  const location = cleanText(data.location);
-  const minPrice = cleanText(data.minPrice);
-  const maxPrice = cleanText(data.maxPrice);
-  const bedrooms = cleanText(data.bedrooms);
-  const bathrooms = cleanText(data.bathrooms);
-  const parking = cleanText(data.parking);
-  const direction = cleanText(data.direction);
-  const notes = cleanText(data.notes);
+  // Clean form values
+  const name = cleanText(data.fullName) || 'N/A';
+  const phone1 = cleanText(data.phone);
+  const phone2 = cleanText(data.phone2);
+  
+  // Combine Phone Numbers into a single string
+  let phoneSummary = phone1 || 'N/A';
+  if (phone2) {
+    phoneSummary += `, ${phone2}`;
+  }
+
+  const handle = cleanText(data.telegramUser) || 'N/A';
+  const target = cleanText(data.target) || 'N/A';
+  const propertyType = cleanText(data.propertyType) || 'N/A';
+  const location = cleanText(data.location) || 'N/A';
+  const minPrice = cleanText(data.minPrice) || '0';
+  const maxPrice = cleanText(data.maxPrice) || '0';
+  const bedrooms = cleanText(data.bedrooms) || 'N/A';
+  const bathrooms = cleanText(data.bathrooms) || 'N/A';
+  const parking = cleanText(data.parking) || 'N/A';
+  const direction = cleanText(data.direction) || 'N/A';
+  const notes = cleanText(data.notes) || 'None';
 
   // 1. Direct Message to Client User
   if (data.chat_id) {
@@ -80,10 +87,10 @@ app.post('/submit-form', async (req, res) => {
 Thank you, ${name}, for registering with 25Realty.
 
 Summary of Details:
-• Phone: ${phone}
+• Phone: ${phoneSummary}
 • Telegram Handle: @${handle}
-• Category: ${category}
-• Property: ${propertyType} (${listingType})
+• Target: ${target}
+• Property Type: ${propertyType}
 • Location: ${location}
 • Price Range: $${minPrice} - $${maxPrice}
 • Bedrooms: ${bedrooms}
@@ -104,10 +111,10 @@ Our team will contact you shortly!`;
 `🚨 NEW CLIENT INQUIRY ALERT 🚨
 
 👤 Client Name: ${name}
-📞 Phone: ${phone}
+📞 Phone: ${phoneSummary}
 💬 Telegram Handle: @${handle}
-🏷️ Category: ${category}
-🏠 Type: ${propertyType} (${listingType})
+🏷️ Target: ${target}
+🏠 Type: ${propertyType}
 📍 Location: ${location}
 💰 Budget: $${minPrice} - $${maxPrice}
 🛏️ Bedrooms: ${bedrooms}
